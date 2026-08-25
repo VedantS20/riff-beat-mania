@@ -9,10 +9,7 @@ type Props = {
 
 type YTPlayer = { destroy: () => void };
 type YTNamespace = {
-  Player: new (
-    el: HTMLElement,
-    opts: Record<string, unknown>,
-  ) => YTPlayer;
+  Player: new (el: HTMLElement, opts: Record<string, unknown>) => YTPlayer;
 };
 
 declare global {

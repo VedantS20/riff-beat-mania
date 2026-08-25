@@ -369,7 +369,11 @@ function PlayPage() {
       </div>
 
       {/* keeps navigate() typed usage referenced for endless-mode deep links */}
-      <span className="hidden" aria-hidden onClick={() => navigate({ to: "/play", search: { difficulty, mode } })} />
+      <span
+        className="hidden"
+        aria-hidden
+        onClick={() => navigate({ to: "/play", search: { difficulty, mode } })}
+      />
     </main>
   );
 }

@@ -111,7 +111,10 @@ export function GameOverPanel({
       </div>
 
       <div className="mt-4 text-center">
-        <Link to="/" className="text-xs tracking-[0.2em] text-muted-foreground uppercase hover:text-foreground">
+        <Link
+          to="/"
+          className="text-xs tracking-[0.2em] text-muted-foreground uppercase hover:text-foreground"
+        >
           Change difficulty
         </Link>
       </div>

@@ -18,7 +18,7 @@ function normalize(value: string) {
 }
 
 export const getPreview = createServerFn({ method: "GET" })
-  .inputValidator((data: unknown) => schema.parse(data))
+  .validator((data: unknown) => schema.parse(data))
   .handler(async ({ data }): Promise<PreviewResult> => {
     const query = `artist:"${data.band}" track:"${data.title}"`;
     const attempts = [

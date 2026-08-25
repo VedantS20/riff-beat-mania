@@ -137,11 +137,25 @@ export function SnippetStage({
 
   return (
     <div className="flex flex-col items-center gap-6">
-      <audio ref={audioRef} src={previewUrl ?? undefined} crossOrigin="anonymous" onEnded={ended} preload="auto" />
+      <audio
+        ref={audioRef}
+        src={previewUrl ?? undefined}
+        crossOrigin="anonymous"
+        onEnded={ended}
+        preload="auto"
+      />
 
       <div className="relative h-72 w-72 sm:h-80 sm:w-80">
         <svg viewBox="0 0 300 300" className="absolute inset-0 h-full w-full -rotate-90">
-          <circle cx="150" cy="150" r={radius} fill="none" stroke="currentColor" strokeWidth="6" className="text-white/10" />
+          <circle
+            cx="150"
+            cy="150"
+            r={radius}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="6"
+            className="text-white/10"
+          />
           <circle
             cx="150"
             cy="150"
@@ -178,7 +192,12 @@ export function SnippetStage({
             ))}
             <div className="absolute inset-[32%] overflow-hidden rounded-full border border-white/20 bg-primary/80 shadow-inner">
               {cover ? (
-                <img src={cover} alt="" aria-hidden className="h-full w-full object-cover opacity-40 blur-md" />
+                <img
+                  src={cover}
+                  alt=""
+                  aria-hidden
+                  className="h-full w-full object-cover opacity-40 blur-md"
+                />
               ) : null}
             </div>
             <div className="absolute top-1/2 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-background" />
@@ -188,7 +207,9 @@ export function SnippetStage({
         <div className="pointer-events-none absolute inset-0 grid place-items-center">
           <div className="glass flex flex-col items-center rounded-2xl px-4 py-2">
             <span className="font-display text-3xl leading-none tabular-nums">{remaining}s</span>
-            <span className="text-[10px] tracking-[0.25em] text-muted-foreground uppercase">left</span>
+            <span className="text-[10px] tracking-[0.25em] text-muted-foreground uppercase">
+              left
+            </span>
           </div>
         </div>
       </div>
@@ -216,7 +237,13 @@ export function SnippetStage({
           className="text-muted-foreground transition-colors hover:text-foreground"
           aria-label={volume > 0 ? "Mute" : "Unmute"}
         >
-          {volume === 0 ? <VolumeX size={18} /> : volume < 0.5 ? <Volume1 size={18} /> : <Volume2 size={18} />}
+          {volume === 0 ? (
+            <VolumeX size={18} />
+          ) : volume < 0.5 ? (
+            <Volume1 size={18} />
+          ) : (
+            <Volume2 size={18} />
+          )}
         </button>
         <input
           type="range"
