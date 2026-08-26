@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { AnimatePresence, motion } from "framer-motion";
@@ -17,7 +17,7 @@ import { buildQuestions, DIFFICULTY_LABELS, type Difficulty, type Question } fro
 
 const searchSchema = z.object({
   difficulty: z.enum(["easy", "medium", "hard"]).default("medium"),
-  mode: z.enum(["5", "10", "endless"]).default("10"),
+  mode: z.preprocess(String, z.enum(["5", "10", "endless"])).default("10"),
 });
 
 export const Route = createFileRoute("/play")({
@@ -35,6 +35,8 @@ export const Route = createFileRoute("/play")({
         property: "og:description",
         content: "Four suspects, 30 seconds, one riff. How fast can you name it?",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: PlayPage,
@@ -45,7 +47,6 @@ const NEXT_ROUND_SECONDS = 8;
 
 function PlayPage() {
   const { difficulty, mode } = Route.useSearch();
-  const navigate = useNavigate();
   const fetchPreview = useServerFn(getPreview);
 
   const roundTarget = mode === "endless" ? Infinity : Number(mode);
@@ -90,7 +91,10 @@ function PlayPage() {
     enabled: Boolean(track),
     staleTime: 1000 * 60 * 30,
     retry: 1,
-    queryFn: () => fetchPreview({ data: { band: track!.band, title: track!.title } }),
+    queryFn: () => {
+      if (!track) return Promise.resolve({ previewUrl: null, cover: null });
+      return fetchPreview({ data: { band: track.band, title: track.title } });
+    },
   });
 
   const previewUrl = preview.data?.previewUrl ?? null;
@@ -368,12 +372,6 @@ function PlayPage() {
         </footer>
       </div>
 
-      {/* keeps navigate() typed usage referenced for endless-mode deep links */}
-      <span
-        className="hidden"
-        aria-hidden
-        onClick={() => navigate({ to: "/play", search: { difficulty, mode } })}
-      />
     </main>
   );
 }
