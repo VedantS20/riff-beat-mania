@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Disc3, Volume1, Volume2, VolumeX } from "lucide-react";
+import { Disc3, Play, Volume1, Volume2, VolumeX } from "lucide-react";
 
 const SNIPPET_SECONDS = 30;
 const BAR_COUNT = 40;
@@ -35,6 +35,7 @@ export function SnippetStage({
 
   const [elapsed, setElapsed] = useState(0);
   const [levels, setLevels] = useState<number[]>(() => new Array(BAR_COUNT).fill(0.08));
+  const [playbackBlocked, setPlaybackBlocked] = useState(false);
 
   // Volume
   useEffect(() => {
@@ -46,6 +47,7 @@ export function SnippetStage({
     const audio = audioRef.current;
     if (!audio) return;
     finishedRef.current = false;
+    setPlaybackBlocked(false);
     setElapsed(0);
     onElapsedRef.current(0);
 
@@ -56,9 +58,7 @@ export function SnippetStage({
 
     audio.currentTime = 0;
     audio.volume = volume;
-    void audio.play().catch(() => {
-      /* autoplay blocked; the user can retry with a guess-free click */
-    });
+    void audio.play().catch(() => setPlaybackBlocked(true));
 
     // Web Audio analyser (best effort — CORS may block it)
     try {
@@ -122,7 +122,13 @@ export function SnippetStage({
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       audio.pause();
     };
-  }, [playing, previewUrl, volume]);
+  }, [playing, previewUrl]);
+
+  const resumePlayback = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    void audio.play().then(() => setPlaybackBlocked(false));
+  };
 
   const ended = () => {
     if (finishedRef.current) return;
@@ -212,6 +218,16 @@ export function SnippetStage({
             </span>
           </div>
         </div>
+        {playbackBlocked ? (
+          <button
+            type="button"
+            onClick={resumePlayback}
+            className="glow-primary absolute inset-0 m-auto flex h-20 w-20 items-center justify-center rounded-full border border-primary/60 bg-background/90 text-primary"
+            aria-label="Play riff"
+          >
+            <Play size={28} fill="currentColor" />
+          </button>
+        ) : null}
       </div>
 
       {/* visualizer */}

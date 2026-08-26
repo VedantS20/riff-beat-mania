@@ -19,6 +19,8 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Hear a riff, pick the band, watch the music video explode across your screen.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: SetupPage,
