@@ -57,7 +57,12 @@ export function VideoBackdrop({ youtubeId, startSeconds, cover, overlay, volume 
     loadYouTubeApi()
       .then((YT) => {
         if (cancelled || !hostRef.current) return;
-        playerRef.current = new YT.Player(hostRef.current, {
+        hostRef.current.innerHTML = "";
+        const mount = document.createElement("div");
+        mount.style.width = "100%";
+        mount.style.height = "100%";
+        hostRef.current.appendChild(mount);
+        playerRef.current = new YT.Player(mount, {
           videoId: youtubeId,
           playerVars: {
             autoplay: 1,
@@ -111,6 +116,7 @@ export function VideoBackdrop({ youtubeId, startSeconds, cover, overlay, volume 
         /* ignore */
       }
       playerRef.current = null;
+      if (hostRef.current) hostRef.current.innerHTML = "";
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [youtubeId, startSeconds]);
