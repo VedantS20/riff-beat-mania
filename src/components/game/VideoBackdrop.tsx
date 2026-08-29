@@ -71,9 +71,25 @@ export function VideoBackdrop({ youtubeId, startSeconds, cover, overlay }: Props
             start: Math.max(0, Math.floor(startSeconds)),
           },
           events: {
-            onReady: (event: { target: { playVideo: () => void; mute: () => void } }) => {
+            onReady: (event: {
+              target: {
+                playVideo: () => void;
+                mute: () => void;
+                unMute: () => void;
+                setVolume: (v: number) => void;
+              };
+            }) => {
               event.target.mute();
               event.target.playVideo();
+              // Unmute shortly after playback starts (the guess click is the user gesture)
+              setTimeout(() => {
+                try {
+                  event.target.unMute();
+                  event.target.setVolume(Math.round(volume * 100));
+                } catch {
+                  /* stays muted */
+                }
+              }, 350);
               if (!cancelled) setReady(true);
             },
             onError: () => {
