@@ -43,7 +43,6 @@ export const Route = createFileRoute("/play")({
 });
 
 const BASE_POINTS = 100;
-const NEXT_ROUND_SECONDS = 8;
 
 function PlayPage() {
   const { difficulty, mode } = Route.useSearch();
@@ -64,7 +63,6 @@ function PlayPage() {
   const [longestStreak, setLongestStreak] = useState(0);
   const [results, setResults] = useState<RoundResult[]>([]);
   const [volume, setVolume] = useState(0.8);
-  const [countdown, setCountdown] = useState(NEXT_ROUND_SECONDS);
   const [shared, setShared] = useState(false);
   const [revealAt, setRevealAt] = useState(0);
   const elapsedRef = useRef(0);
@@ -119,7 +117,6 @@ function PlayPage() {
         return next;
       });
       setResults((prev) => [...prev, { track, correct, points: base + speed }]);
-      setCountdown(NEXT_ROUND_SECONDS);
       setPhase("reveal");
     },
     [track],
