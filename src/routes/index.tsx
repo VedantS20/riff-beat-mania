@@ -46,7 +46,7 @@ function SetupPage() {
   return (
     <main className="relative min-h-screen">
       <Backdrop />
-      <div className="mx-auto flex min-h-screen max-w-4xl flex-col justify-center px-5 py-14">
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-4xl flex-col justify-center px-5 py-14">
         <motion.header
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}

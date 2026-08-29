@@ -7,7 +7,6 @@ type Props = {
   correct: boolean;
   basePoints: number;
   speedBonus: number;
-  countdown: number;
   isLast: boolean;
   onNext: () => void;
 };
@@ -17,7 +16,6 @@ export function RevealCard({
   correct,
   basePoints,
   speedBonus,
-  countdown,
   isLast,
   onNext,
 }: Props) {
