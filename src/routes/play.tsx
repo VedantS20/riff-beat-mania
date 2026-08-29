@@ -43,7 +43,6 @@ export const Route = createFileRoute("/play")({
 });
 
 const BASE_POINTS = 100;
-const NEXT_ROUND_SECONDS = 8;
 
 function PlayPage() {
   const { difficulty, mode } = Route.useSearch();
@@ -64,7 +63,6 @@ function PlayPage() {
   const [longestStreak, setLongestStreak] = useState(0);
   const [results, setResults] = useState<RoundResult[]>([]);
   const [volume, setVolume] = useState(0.8);
-  const [countdown, setCountdown] = useState(NEXT_ROUND_SECONDS);
   const [shared, setShared] = useState(false);
   const [revealAt, setRevealAt] = useState(0);
   const elapsedRef = useRef(0);
@@ -119,7 +117,6 @@ function PlayPage() {
         return next;
       });
       setResults((prev) => [...prev, { track, correct, points: base + speed }]);
-      setCountdown(NEXT_ROUND_SECONDS);
       setPhase("reveal");
     },
     [track],
@@ -152,22 +149,6 @@ function PlayPage() {
       return next;
     });
   }, [isLastRound, questions.length, difficulty]);
-
-  // Auto-advance countdown during reveal
-  useEffect(() => {
-    if (phase !== "reveal") return;
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          goNext();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [phase, index, goNext]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -355,7 +336,6 @@ function PlayPage() {
                   correct={wasCorrect}
                   basePoints={roundPoints.base}
                   speedBonus={roundPoints.speed}
-                  countdown={countdown}
                   isLast={isLastRound}
                   onNext={goNext}
                 />

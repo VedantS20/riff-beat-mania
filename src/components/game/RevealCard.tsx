@@ -7,7 +7,6 @@ type Props = {
   correct: boolean;
   basePoints: number;
   speedBonus: number;
-  countdown: number;
   isLast: boolean;
   onNext: () => void;
 };
@@ -17,7 +16,6 @@ export function RevealCard({
   correct,
   basePoints,
   speedBonus,
-  countdown,
   isLast,
   onNext,
 }: Props) {
@@ -81,7 +79,6 @@ export function RevealCard({
       >
         {isLast ? "See results" : "Next round"}
         <ArrowRight size={18} />
-        <span className="text-primary-foreground/70 tabular-nums">({countdown})</span>
       </button>
     </motion.div>
   );
