@@ -223,6 +223,7 @@ function PlayPage() {
     return (
       <main className="relative flex min-h-screen items-center justify-center px-5 py-12">
         <Backdrop />
+        <div className="relative z-10 w-full">
         <GameOverPanel
           results={results}
           score={score}
@@ -231,6 +232,7 @@ function PlayPage() {
           onShare={handleShare}
           onPlayAgain={() => setSeed((prev) => prev + 1)}
         />
+        </div>
       </main>
     );
   }
@@ -242,13 +244,14 @@ function PlayPage() {
           youtubeId={track.youtubeId}
           startSeconds={revealAt}
           cover={cover}
-          overlay={0.55}
+          overlay={0.35}
+          volume={volume}
         />
       ) : (
         <Backdrop />
       )}
 
-      <div className="mx-auto flex min-h-screen max-w-3xl flex-col px-5 py-6">
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-3xl flex-col px-5 py-6">
         <header className="flex items-center justify-between gap-3">
           <Link
             to="/"

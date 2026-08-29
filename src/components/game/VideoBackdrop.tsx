@@ -5,6 +5,7 @@ type Props = {
   startSeconds: number;
   cover: string | null;
   overlay: number;
+  volume?: number;
 };
 
 type YTPlayer = { destroy: () => void };
@@ -42,7 +43,7 @@ function loadYouTubeApi(): Promise<YTNamespace> {
   return apiPromise;
 }
 
-export function VideoBackdrop({ youtubeId, startSeconds, cover, overlay }: Props) {
+export function VideoBackdrop({ youtubeId, startSeconds, cover, overlay, volume = 0.8 }: Props) {
   const hostRef = useRef<HTMLDivElement | null>(null);
   const playerRef = useRef<YTPlayer | null>(null);
   const [ready, setReady] = useState(false);
@@ -111,10 +112,11 @@ export function VideoBackdrop({ youtubeId, startSeconds, cover, overlay }: Props
       }
       playerRef.current = null;
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [youtubeId, startSeconds]);
 
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-background">
+    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-background">
       {cover ? (
         <img
           src={cover}

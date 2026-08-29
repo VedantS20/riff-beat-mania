@@ -1,6 +1,6 @@
 export function Backdrop() {
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-background">
+    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-background">
       <div className="animate-aurora absolute -top-1/3 left-[-10%] h-[70vh] w-[70vw] rounded-full bg-primary/25 blur-[120px]" />
       <div
         className="animate-aurora absolute right-[-15%] bottom-[-20%] h-[60vh] w-[60vw] rounded-full bg-violet/25 blur-[130px]"
