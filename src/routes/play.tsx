@@ -153,22 +153,6 @@ function PlayPage() {
     });
   }, [isLastRound, questions.length, difficulty]);
 
-  // Auto-advance countdown during reveal
-  useEffect(() => {
-    if (phase !== "reveal") return;
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          goNext();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [phase, index, goNext]);
-
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
@@ -355,7 +339,6 @@ function PlayPage() {
                   correct={wasCorrect}
                   basePoints={roundPoints.base}
                   speedBonus={roundPoints.speed}
-                  countdown={countdown}
                   isLast={isLastRound}
                   onNext={goNext}
                 />
