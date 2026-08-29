@@ -5,6 +5,7 @@ type Props = {
   startSeconds: number;
   cover: string | null;
   overlay: number;
+  volume?: number;
 };
 
 type YTPlayer = { destroy: () => void };
@@ -42,7 +43,7 @@ function loadYouTubeApi(): Promise<YTNamespace> {
   return apiPromise;
 }
 
-export function VideoBackdrop({ youtubeId, startSeconds, cover, overlay }: Props) {
+export function VideoBackdrop({ youtubeId, startSeconds, cover, overlay, volume = 0.8 }: Props) {
   const hostRef = useRef<HTMLDivElement | null>(null);
   const playerRef = useRef<YTPlayer | null>(null);
   const [ready, setReady] = useState(false);
@@ -56,7 +57,12 @@ export function VideoBackdrop({ youtubeId, startSeconds, cover, overlay }: Props
     loadYouTubeApi()
       .then((YT) => {
         if (cancelled || !hostRef.current) return;
-        playerRef.current = new YT.Player(hostRef.current, {
+        hostRef.current.innerHTML = "";
+        const mount = document.createElement("div");
+        mount.style.width = "100%";
+        mount.style.height = "100%";
+        hostRef.current.appendChild(mount);
+        playerRef.current = new YT.Player(mount, {
           videoId: youtubeId,
           playerVars: {
             autoplay: 1,
@@ -71,9 +77,25 @@ export function VideoBackdrop({ youtubeId, startSeconds, cover, overlay }: Props
             start: Math.max(0, Math.floor(startSeconds)),
           },
           events: {
-            onReady: (event: { target: { playVideo: () => void; mute: () => void } }) => {
+            onReady: (event: {
+              target: {
+                playVideo: () => void;
+                mute: () => void;
+                unMute: () => void;
+                setVolume: (v: number) => void;
+              };
+            }) => {
               event.target.mute();
               event.target.playVideo();
+              // Unmute shortly after playback starts (the guess click is the user gesture)
+              setTimeout(() => {
+                try {
+                  event.target.unMute();
+                  event.target.setVolume(Math.round(volume * 100));
+                } catch {
+                  /* stays muted */
+                }
+              }, 350);
               if (!cancelled) setReady(true);
             },
             onError: () => {
@@ -94,11 +116,13 @@ export function VideoBackdrop({ youtubeId, startSeconds, cover, overlay }: Props
         /* ignore */
       }
       playerRef.current = null;
+      if (hostRef.current) hostRef.current.innerHTML = "";
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [youtubeId, startSeconds]);
 
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-background">
+    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-background">
       {cover ? (
         <img
           src={cover}
