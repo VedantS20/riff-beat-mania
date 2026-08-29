@@ -79,7 +79,6 @@ export function RevealCard({
       >
         {isLast ? "See results" : "Next round"}
         <ArrowRight size={18} />
-        <span className="text-primary-foreground/70 tabular-nums">({countdown})</span>
       </button>
     </motion.div>
   );
